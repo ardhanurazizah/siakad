@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\Mahasiswa as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+
 use Illuminate\Database\Eloquent\Model;//Model Eloquent
 
 class Mahasiswa extends Model //Definisi Model
@@ -22,6 +23,11 @@ class Mahasiswa extends Model //Definisi Model
         'Nama',
         'Kelas',
         'Jurusan',
+        'Email',
+        'jeniskelamin',
+        'Email',
+        'Alamat',
+        'tanggallahir',
 ];
 
 }
