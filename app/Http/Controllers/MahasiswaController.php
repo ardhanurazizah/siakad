@@ -5,6 +5,8 @@ use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Db;
 use App\Models\Kelas;
+use App\Models\MataKuliah;
+use App\Models\Mahasiswa_MataKuliah;
 
 class MahasiswaController extends Controller
 {
@@ -79,17 +81,16 @@ class MahasiswaController extends Controller
         $mahasiswa->email = $request->get('Email');
         $mahasiswa->alamat = $request->get('Alamat');
         $mahasiswa->tanggallahir = $request->get('tanggallahir');
-        $mahasiswa->save();
+        
     
     
-        $kelas = new Kelas;
-        $kelas->id = $request->get('kelas');
-    
+        $kelas = Kelas::find($request->get('Kelas'));
         //fungsi eloquent untuk menambah data dengan relasi belongsTo
+
         $mahasiswa->kelas()->associate($kelas);
         $mahasiswa->save();
-
-        // Mahasiswa::create($request->all());
+    
+                     // Mahasiswa::create($request->all());
     
         //jika data berhasil ditambahkan, akan kembali ke halaman utama
         return redirect()->route('mahasiswa.index')
@@ -178,8 +179,7 @@ class MahasiswaController extends Controller
 		$mahasiswa->save();
 		
 
-		$kelas = new Kelas;
-		$kelas->id = $request->get('Kelas');
+		$kelas = Kelas::find($request->get('Kelas'));
 		
         //fungsi eloquent untuk mengupdate data dengan relasi belongsTo
 		$mahasiswa->kelas()->associate($kelas);
@@ -203,7 +203,11 @@ class MahasiswaController extends Controller
         Mahasiswa::where('nim', $nim)->delete();
         return redirect()->route('mahasiswa.index')
           -> with('success', 'Mahasiswa Berhasil Dihapus');
-
-
+    }
+    public function Mahasiswa_MataKuliah($Nim)
+    {
+        $mahasiswa = Mahasiswa_MataKuliah::with('matakuliah')->where('mahasiswa_id', $Nim)->get();
+        $mahasiswa->mahasiswa = Mahasiswa::with('kelas')->where('id_mahasiswa', $Nim)->first();
+        return view('mahasiswa.nilai', ['mahasiswa' => $mahasiswa]);
     }
 }
