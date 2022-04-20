@@ -53,6 +53,11 @@
                     <label for="tanggallahir">Tanggal Lahir</label>
                     <input type="tanggallahir" name="tanggallahir" class="form-control" id="tanggallahir" value="{{ $mahasiswa->tanggallahir }}" aria-describedby="tanggallahir" >
                 </div>
+                <div class="form-group">
+            <label for="featured_image">Foto</label>
+            <input type="file" name="featured_image" class="form-control" value="{{ $mahasiswa->featured_image}}" id="featured_image" ariadescribedby="featured_image" >
+            <img style="width: 100%" src="{{ asset('./storage/'. $mahasiswa->featured_image) }}" alt="">
+          </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>

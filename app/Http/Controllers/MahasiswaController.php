@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Db;
 use App\Models\Kelas;
 use App\Models\MataKuliah;
 use App\Models\Mahasiswa_MataKuliah;
+use Illuminate\Support\Facades\Storage;
+use PDF;
 
 class MahasiswaController extends Controller
 {
@@ -60,6 +62,9 @@ class MahasiswaController extends Controller
      */
     public function store(Request $request)
     {
+        if($request->file('featured_image')) {
+            $image_name = $request->file('featured_image')->store('images', 'public');
+        }
         //melakukan validasi data
         $request->validate([
             'Nim' => 'required',
@@ -70,9 +75,12 @@ class MahasiswaController extends Controller
             'Email' => 'required',
             'Alamat' => 'required',
             'tanggallahir' => 'required',
+            'featured_image' => 'required',
+
         ]);
         // //fungsi eloquent untuk menambah data
         // Mahasiswa::create($request->all());
+        
         $mahasiswa = new Mahasiswa;
         $mahasiswa->nim = $request->get('Nim');
         $mahasiswa->nama = $request->get('Nama');
@@ -81,7 +89,7 @@ class MahasiswaController extends Controller
         $mahasiswa->email = $request->get('Email');
         $mahasiswa->alamat = $request->get('Alamat');
         $mahasiswa->tanggallahir = $request->get('tanggallahir');
-        
+        $mahasiswa->featured_image = $image_name;
     
     
         $kelas = Kelas::find($request->get('Kelas'));
@@ -154,6 +162,7 @@ class MahasiswaController extends Controller
             'Email' => 'required',
             'Alamat' => 'required',
             'tanggallahir' => 'required',
+            'featured_image' => 'required',
         ]);
         // //fungsi eloquent untuk mengupdate data inputan kita 
         // Mahasiswa::where('nim', $nim)
@@ -176,10 +185,25 @@ class MahasiswaController extends Controller
         $mahasiswa->email = $request->get('Email');
         $mahasiswa->alamat = $request->get('Alamat');
         $mahasiswa->tanggallahir = $request->get('tanggallahir');
-		$mahasiswa->save();
 		
 
-		$kelas = Kelas::find($request->get('Kelas'));
+        if ($mahasiswa->featured_image && file_exists(storage_path('app/public/'. $mahasiswa->featured_image))) {
+            Storage::delete('public/'. $mahasiswa->featured_image);
+        }
+
+        $image_name = '';
+        if ($request->file('featured_image')) {
+        $image_name = $request->file('featured_image')->store('images', 'public');
+        }
+
+        $mahasiswa->featured_image = $image_name;
+        $mahasiswa->save();
+
+        $kelas = new Kelas;
+        $kelas->id = $request->get('Kelas');
+		
+
+		// $kelas = Kelas::find($request->get('Kelas'));
 		
         //fungsi eloquent untuk mengupdate data dengan relasi belongsTo
 		$mahasiswa->kelas()->associate($kelas);
@@ -210,4 +234,16 @@ class MahasiswaController extends Controller
         $mahasiswa->mahasiswa = Mahasiswa::with('kelas')->where('id_mahasiswa', $Nim)->first();
         return view('mahasiswa.nilai', ['mahasiswa' => $mahasiswa]);
     }
+    public function cetak_pdf($nim){
+        // dd('tetsing');
+        $Mahasiswa = Mahasiswa::where('nim', $nim)->first();
+        $nilai = Mahasiswa_MataKuliah::where('mahasiswa_id', $Mahasiswa->id_mahasiswa)
+                                       ->with('matakuliah')
+                                       ->with('mahasiswa')
+                                       ->get();
+        $nilai->mahasiswa = Mahasiswa::with('kelas')->where('nim', $nim)->first();
+        $pdf = PDF::loadview('mahasiswa.cetak_pdf', compact('nilai'));
+        return $pdf->stream();
+    }
+
 }

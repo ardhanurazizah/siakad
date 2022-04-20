@@ -40,6 +40,7 @@
         <th>Email</th>
         <th>Alamat</th>
         <th>Tanggal Lahir</th>
+        <th>Foto</th>
         <th width="280px">Action</th>
     </tr>
     
@@ -54,6 +55,7 @@
     <td>{{ $mhs ->email }}</td>
     <td>{{ $mhs ->alamat}}</td>
     <td>{{ $mhs ->tanggallahir }}</td>
+    <td><img width="50px"src="{{asset('storage/'.$mhs->featured_image)}}"></td>
     <td>
         <form action="{{ route('mahasiswa.destroy',['mahasiswa'=>$mhs->nim]) }}" method="POST">
             
