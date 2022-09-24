@@ -22,7 +22,7 @@
             <p><b>Nama : </b> {{ $nilai->mahasiswa->nama }}</p>
             <p><b>NIM : </b> {{ $nilai->mahasiswa->nim }}</p>
             <p><b>Kelas : </b> {{ $nilai->mahasiswa->kelas->nama_kelas }}</p>
-        <table class="table table-bordered" style="width:95%;margin:0 auto;">
+        <table class="table table-bordered" style="width:95%;margin:0 auto;" >
         <tr>
             <th>Matakuliah</th>
             <th>SKS</th>

@@ -191,10 +191,10 @@ class MahasiswaController extends Controller
             Storage::delete('public/'. $mahasiswa->featured_image);
         }
 
-        $image_name = '';
-        if ($request->file('featured_image')) {
+      
+         
         $image_name = $request->file('featured_image')->store('images', 'public');
-        }
+        
 
         $mahasiswa->featured_image = $image_name;
         $mahasiswa->save();

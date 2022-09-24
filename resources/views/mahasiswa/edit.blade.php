@@ -13,7 +13,7 @@
                     <li>{{ $error }}</li> @endforeach
                 </ul>
             </div> @endif
-            <form method="post" action="{{ route('mahasiswa.update', $mahasiswa->nim) }}" id="myForm"> @csrf
+            <form method="post" action="{{ route('mahasiswa.update', $mahasiswa->nim) }}" enctype="multipart/form-data" id="myForm"> @csrf
                 @method('PUT')
                 <div class="form-group">
                     <label for="Nim">Nim</label>
