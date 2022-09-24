@@ -76,11 +76,11 @@ class MahasiswaTest extends TestCase
         //tambahkan post ke /create
         Mahasiswa::create([
                     'nim' => 204172008,
-                    'nama' => 'Venny Meida',
-                    'email' => 'venny@gmail.com',
+                    'nama' => 'Clarisha',
+                    'email' => 'clarisha@gmail.com',
                     'jeniskelamin' => 'perempuan',
                     'tanggallahir' => date('Y-m-d'),
-                    'alamat' => 'Kabupaten Kediri',
+                    'alamat' => 'Kabupaten Nganjuk',
                     'kelas_id' => 4 ,
                     'jurusan' => 'Teknologi Informasi',
                     'featured_image' => 'images/wdfEg46p4QE9NuWDY3E0EHHbMC83CraYGGwHNgAL.png',
@@ -123,11 +123,11 @@ class MahasiswaTest extends TestCase
         // generate 1 data post
         $Mahasiswa = Mahasiswa::create([
             'nim' => 2041728,
-            'nama' => 'Venny Meida',
-            'email' => 'venny@gmail.com',
+            'nama' => 'Clarisha',
+            'email' => 'clarisha@gmail.com',
             'jeniskelamin' => 'perempuan',
             'tanggallahir' => date('Y-m-d'),
-            'alamat' => 'Kabupaten Kediri',
+            'alamat' => 'Kabupaten Nganjuk',
             'kelas_id' => 4 ,
             'jurusan' => 'Teknologi Informasi',
             'featured_image' => 'images/wdfEg46p4QE9NuWDY3E0EHHbMC83CraYGGwHNgAL.png',
@@ -135,11 +135,11 @@ class MahasiswaTest extends TestCase
 
         $response = $this->get('/mahasiswa/2041728/edit');
         $response->assertStatus(200);
-        Mahasiswa::where('nama', 'Venny Meida')->update(['nama' => 'vennol']);
+        Mahasiswa::where('nama', 'Clarisha')->update(['nama' => 'Clarisha Sandra']);
 
         $response = $this->get('/mahasiswa');
 
-        $response->assertSeeText('vennol');
+        $response->assertSeeText('Clarisha Sandra');
     }
 
     /** @test */
@@ -148,10 +148,10 @@ class MahasiswaTest extends TestCase
         $this->assertTrue(true);
         $response = $this->get('/mahasiswa');
         $response->assertStatus(200);
-        Mahasiswa::where('nama', 'vennol')->delete();
+        Mahasiswa::where('nama', 'Clarisha Sandra')->delete();
 
         $response = $this->get('/mahasiswa');
 
-        $response->assertDontSee('vennol');
+        $response->assertDontSee('Clarisha Sandra');
     }
 }
